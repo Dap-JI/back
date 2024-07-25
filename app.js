@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const session = require("express-session");
 const cors = require("cors");
 const db = require("./models");
 const apiRoutes = require("./routes/index");
@@ -11,6 +12,15 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET, // 비밀 키 설정
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // 개발 환경에서는 false로 설정, 배포 시 true로 설정
+  })
+);
 
 app.use("/api", apiRoutes); // API 라우트 설정
 
