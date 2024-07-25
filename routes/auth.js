@@ -47,4 +47,27 @@ router.get("/kakao", kakaoLogin);
  */
 router.get("/kakao/callback", kakaoCallback);
 
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   get:
+ *     summary: 로그아웃
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: 로그아웃 성공
+ *       500:
+ *         description: 서버 오류
+ */
+router.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Error destroying session:", err);
+      return res.status(500).send("Logout failed");
+    }
+    res.clearCookie("connect.sid"); // 세션 쿠키 제거
+    res.send("Logout successful");
+  });
+});
+
 module.exports = router;
