@@ -5,6 +5,7 @@ const session = require("express-session");
 const cors = require("cors");
 const db = require("./models");
 const apiRoutes = require("./routes/index");
+const { swaggerUi, specs } = require("./swagger"); // Swagger 설정 파일 추가
 
 const app = express();
 const port = process.env.PORT;
@@ -23,6 +24,7 @@ app.use(
 );
 
 app.use("/api", apiRoutes); // API 라우트 설정
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)); // Swagger UI 설정
 
 // 데이터베이스 동기화
 db.sequelize
