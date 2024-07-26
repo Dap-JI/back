@@ -6,6 +6,7 @@ const Cgym = require("../controllers/Cgym");
 
 router.use("/auth", authRoutes);
 
+// 클라이밍장 CRUD
 /**
  * @swagger
  * /api/gyms:
@@ -36,7 +37,6 @@ router.use("/auth", authRoutes);
  *         description: 서버 오류
  */
 router.get("/gyms", Cgym.getGyms);
-
 /**
  * @swagger
  * /api/gyms:
@@ -80,5 +80,79 @@ router.get("/gyms", Cgym.getGyms);
  *         description: 서버 오류
  */
 router.post("/gyms", Cgym.createGym);
+/**
+ * @swagger
+ * /api/gyms/{gym_idx}:
+ *   patch:
+ *     summary: 클라이밍장 정보 수정
+ *     tags: [Gym]
+ *     parameters:
+ *       - in: path
+ *         name: gym_idx
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Gym ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *               logo:
+ *                 type: string
+ *               notice:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Gym 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 gym_idx:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 address:
+ *                   type: string
+ *                 logo:
+ *                   type: string
+ *                 notice:
+ *                   type: string
+ *       404:
+ *         description: Gym을 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.patch("/gyms/:gym_idx", Cgym.updateGym);
+/**
+ * @swagger
+ * /api/gyms/{gym_idx}:
+ *   delete:
+ *     summary: 클라이밍장 삭제
+ *     tags: [Gym]
+ *     parameters:
+ *       - in: path
+ *         name: gym_idx
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Gym ID
+ *     responses:
+ *       204:
+ *         description: Gym 삭제 성공 (No Content)
+ *       404:
+ *         description: Gym을 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.delete("/gyms/:gym_idx", Cgym.deleteGym);
 
 module.exports = router;
