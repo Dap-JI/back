@@ -42,11 +42,12 @@ exports.kakaoCallback = async (req, res) => {
     const nickname = user.properties.nickname;
     const email = user.kakao_account.email;
     const img = user.kakao_account.profile.profile_image_url;
+    const provider = "kakao";
 
     // 사용자 정보 저장 또는 업데이트
     const [userRecord, created] = await db.User.findOrCreate({
-      where: { email },
-      defaults: { nickname, email, img },
+      where: { email, provider },
+      defaults: { nickname, email, img, provider },
     });
 
     if (!created) {
@@ -56,10 +57,11 @@ exports.kakaoCallback = async (req, res) => {
 
     // 세션에 사용자 정보 저장
     req.session.user = {
-      id: userRecord.id,
+      //   id: userRecord.id,
       nickname: userRecord.nickname,
       email: userRecord.email,
       img: userRecord.img,
+      provider: userRecord.provider,
     };
     console.log("Session user data:", req.session.user);
 

@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.NOW,
         allowNull: false,
       },
+      provider: {
+        type: DataTypes.ENUM,
+        values: ["kakao", "naver"],
+        allowNull: false,
+      },
     },
     {
       timestamps: true,
