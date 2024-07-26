@@ -1,5 +1,6 @@
 const axios = require("axios");
 const db = require("../models");
+const session = require("express-session");
 const querystring = require("querystring");
 
 exports.naverLogin = (req, res) => {

@@ -50,7 +50,7 @@ router.get("/kakao/callback", kakaoCallback);
 
 /**
  * @swagger
- * /auth/naver:
+ * /api/auth/naver:
  *   get:
  *     summary: 네이버 로그인
  *     tags: [Auth]
@@ -62,7 +62,7 @@ router.get("/naver", naverLogin);
 
 /**
  * @swagger
- * /auth/naver/callback:
+ * /api/auth/naver/callback:
  *   get:
  *     summary: 네이버 로그인 콜백
  *     tags: [Auth]
