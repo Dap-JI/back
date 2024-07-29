@@ -61,6 +61,28 @@ exports.updatePost = async (req, res) => {
   }
 };
 
+exports.getPostDetails = async (req, res) => {
+  try {
+    const { post_idx } = req.params;
+    const post = await db.Post.findOne({
+      where: { post_idx },
+      include: [
+        {
+          model: db.User,
+          attributes: ["nickname", "img"],
+        },
+      ],
+    });
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+    res.status(200).json(post);
+  } catch (error) {
+    console.error("Error fetching post details", error);
+    res.status(500).json({ message: "Error fetching post details" });
+  }
+};
+
 exports.deletePost = async (req, res) => {
   try {
     const { post_idx } = req.params;
