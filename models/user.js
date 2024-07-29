@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
+      introduce: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+      },
       isDelete: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
