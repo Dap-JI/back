@@ -156,6 +156,7 @@ router.patch("/gyms/:gym_idx", Cgym.updateGym);
  */
 router.delete("/gyms/:gym_idx", Cgym.deleteGym);
 
+// 게시글 CRUD
 /**
  * @swagger
  * /api/posts:
@@ -193,16 +194,21 @@ router.delete("/gyms/:gym_idx", Cgym.deleteGym);
  *         description: 서버 오류
  */
 router.post("/posts", Cpost.createPost);
-
 /**
  * @swagger
- * /api/posts:
+ * /api/posts/user/{user_idx}:
  *   get:
- *     summary: 모든 게시글 조회
+ *     summary: 특정 사용자의 게시글 조회
  *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: user_idx
+ *         required: true
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
- *         description: 게시글 조회 성공
+ *         description: 사용자 게시글 조회 성공
  *         content:
  *           application/json:
  *             schema:
@@ -212,38 +218,36 @@ router.post("/posts", Cpost.createPost);
  *       500:
  *         description: 서버 오류
  */
-router.get("/posts", Cpost.getPosts);
-
+router.get("/posts/user/:user_idx", Cpost.getPostsByUser);
 /**
  * @swagger
- * /api/posts/{post_idx}:
+ * /api/posts/gym/{gym_idx}:
  *   get:
- *     summary: 특정 게시글 조회
+ *     summary: 특정 클라이밍장의 게시글 조회
  *     tags: [Posts]
  *     parameters:
  *       - in: path
- *         name: post_idx
+ *         name: gym_idx
  *         required: true
  *         schema:
  *           type: integer
  *     responses:
  *       200:
- *         description: 게시글 조회 성공
+ *         description: 클라이밍장 게시글 조회 성공
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *       404:
- *         description: 게시글을 찾을 수 없음
+ *               type: array
+ *               items:
+ *                 type: object
  *       500:
  *         description: 서버 오류
  */
-router.get("/posts/:post_idx", Cpost.getPostById);
-
+router.get("/posts/gym/:gym_idx", Cpost.getPostsByGym);
 /**
  * @swagger
  * /api/posts/{post_idx}:
- *   put:
+ *   patch:
  *     summary: 게시글 수정
  *     tags: [Posts]
  *     parameters:
@@ -280,8 +284,7 @@ router.get("/posts/:post_idx", Cpost.getPostById);
  *       500:
  *         description: 서버 오류
  */
-router.put("/posts/:post_idx", Cpost.updatePost);
-
+router.patch("/posts/:post_idx", Cpost.updatePost);
 /**
  * @swagger
  * /api/posts/{post_idx}:
