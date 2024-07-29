@@ -42,7 +42,7 @@ const router = express.Router();
 router.post(
   "/images/gym-logo",
   uploadGymLogo.single("image"),
-  imageController.uploadImage
+  Cimage.uploadImage
 );
 
 /**
@@ -79,7 +79,7 @@ router.post(
 router.post(
   "/images/profile-picture",
   uploadProfilePicture.single("image"),
-  imageController.uploadImage
+  Cimage.uploadImage
 );
 
 /**
@@ -116,7 +116,7 @@ router.post(
 router.post(
   "/images/board-image",
   uploadBoardImage.single("image"),
-  imageController.uploadImage
+  Cimage.uploadImage
 );
 
 module.exports = router;
