@@ -4,6 +4,7 @@ const authRoutes = require("./auth");
 
 const Cgym = require("../controllers/Cgym");
 const Cpost = require("../controllers/Cpost");
+const Cuser = require("../controllers/Cuser");
 
 router.use("/auth", authRoutes);
 
@@ -196,31 +197,6 @@ router.delete("/gyms/:gym_idx", Cgym.deleteGym);
 router.post("/posts", Cpost.createPost);
 /**
  * @swagger
- * /api/posts/user/{user_idx}:
- *   get:
- *     summary: 특정 사용자의 게시글 조회
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: user_idx
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: 사용자 게시글 조회 성공
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *       500:
- *         description: 서버 오류
- */
-router.get("/posts/user/:user_idx", Cpost.getPostsByUser);
-/**
- * @swagger
  * /api/posts/gym/{gym_idx}:
  *   get:
  *     summary: 특정 클라이밍장의 게시글 조회
@@ -306,5 +282,80 @@ router.patch("/posts/:post_idx", Cpost.updatePost);
  *         description: 서버 오류
  */
 router.delete("/posts/:post_idx", Cpost.deletePost);
+
+// 유저 관련
+/**
+ * @swagger
+ * /api/user/profile/{user_idx}:
+ *   get:
+ *     summary: 유저 프로필 및 게시글 조회
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: user_idx
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: 유저 프로필 및 게시글 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     nickname:
+ *                       type: string
+ *                     img:
+ *                       type: string
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       404:
+ *         description: 유저를 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.get("/profile/:user_idx", Cuser.getUserProfileWithPosts);
+/**
+ * @swagger
+ * /api/user/profile/{user_idx}:
+ *   patch:
+ *     summary: 유저 프로필 수정
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: user_idx
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nickname:
+ *                 type: string
+ *               img:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: 유저 프로필 수정 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: 유저를 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.patch("/profile/:user_idx", Cuser.updateUserProfile);
 
 module.exports = router;

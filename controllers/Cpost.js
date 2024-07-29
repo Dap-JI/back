@@ -27,19 +27,6 @@ exports.createPost = async (req, res) => {
   }
 };
 
-exports.getPostsByUser = async (req, res) => {
-  try {
-    const { user_idx } = req.params;
-    const posts = await db.Post.findAll({
-      where: { user_idx },
-    });
-    res.status(200).json(posts);
-  } catch (error) {
-    console.error("Error fetching posts by user:", error);
-    res.status(500).json({ message: "Error fetching posts by user" });
-  }
-};
-
 exports.getPostsByGym = async (req, res) => {
   try {
     const { gym_idx } = req.params;
