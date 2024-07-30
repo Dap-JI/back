@@ -32,7 +32,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)); // Swagger UI 설
 
 // 데이터베이스 동기화
 db.sequelize
-  .sync({ alter: true })
+  .sync({ alter: false })
   .then(() => {
     console.log("Database synchronized");
     app.listen(port, () => {

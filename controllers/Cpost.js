@@ -29,11 +29,29 @@ exports.createPost = async (req, res) => {
 
 exports.getPostsByGym = async (req, res) => {
   try {
-    const { gym_idx } = req.params;
+    const { gym_idx, user_idx } = req.params;
+    // 조회할 때, gym의 name 가져오기
+    const gym = await db.Gym.findByPk(gym_idx, {
+      attributes: ["name"],
+    });
+    if (!gym) {
+      return res.status(404).json({ message: "Gym not found" });
+    }
     const posts = await db.Post.findAll({
       where: { gym_idx },
+      include: [
+        {
+          model: db.User,
+          attributes: ["nickname"],
+        },
+      ],
     });
-    res.status(200).json(posts);
+    console.log("post.user_idx~~~>>>", posts);
+    const result = {
+      gym_name: gym.name,
+      posts: posts,
+    };
+    res.status(200).json(result);
   } catch (error) {
     console.error("Error fetching posts by gym:", error);
     res.status(500).json({ message: "Error fetching posts by gym" });
