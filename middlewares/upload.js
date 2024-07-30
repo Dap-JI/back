@@ -9,7 +9,7 @@ const getKey = (folder) => (req, file, cb) => {
   cb(null, fileName);
 };
 
-const upload = (folder) =>
+const upload = (folder, fileFilter) =>
   multer({
     storage: multerS3({
       s3: s3,
@@ -20,10 +20,22 @@ const upload = (folder) =>
       },
       key: getKey(folder),
     }),
+    fileFilter: fileFilter,
   });
+
+const videoFileFilter = (req, file, cb) => {
+  const allowedTypes = ["video/mp4", "video/avi", "video/mov", "video/wmv"];
+  if (!allowedTypes.includes(file.mimetype)) {
+    const error = new Error("Invalid file type");
+    error.code = "INVALID_FILE_TYPE";
+    return cb(error, false);
+  }
+  cb(null, true);
+};
 
 module.exports = {
   uploadGymLogo: upload("gym-logos"),
   uploadProfilePicture: upload("profile-pictures"),
   uploadBoardImage: upload("board-images"),
+  uploadVideo: upload("videos", videoFileFilter), // 새로운 동영상 업로드 설정 추가
 };

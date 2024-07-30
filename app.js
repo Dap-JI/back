@@ -6,6 +6,7 @@ const cors = require("cors");
 const db = require("./models");
 const apiRoutes = require("./routes/index");
 const imageRoutes = require("./routes/image");
+const videoRoutes = require("./routes/video"); // 비디오 라우터 추가
 const { swaggerUi, specs } = require("./swagger");
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(
 );
 
 app.use("/api", imageRoutes);
+app.use("/api", videoRoutes);
 app.use("/api", apiRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)); // Swagger UI 설정
 

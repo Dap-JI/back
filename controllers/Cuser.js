@@ -6,7 +6,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
     // 사용자 정보 조회
     const user = await db.User.findOne({
       where: { user_idx },
-      attributes: ["nickname", "img"],
+      attributes: ["nickname", "img", "introduce"],
     });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -29,7 +29,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
   try {
     const { user_idx } = req.params;
-    const { nickname, img } = req.body;
+    const { nickname, img, introduce } = req.body;
     const user = await db.User.findByPk(user_idx);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -37,10 +37,29 @@ exports.updateUserProfile = async (req, res) => {
     const updatedFields = {};
     if (nickname !== undefined) updatedFields.nickname = nickname;
     if (img !== undefined) updatedFields.img = img;
+    if (introduce !== undefined) updatedFields.introduce = introduce;
     await user.update(updatedFields);
     res.status(200).json(user);
   } catch (error) {
     console.log("Error updating user profile", error);
     res.status(500).json({ message: "Error updating user profile" });
+  }
+};
+
+exports.checkNickname = async (req, res) => {
+  try {
+    const { nickname } = req.params;
+    const user = await db.User.findOne({
+      where: { nickname },
+    });
+    if (user) {
+      return res
+        .status(409)
+        .json({ available: false, message: "Nickname is already taken" });
+    }
+    res.status(200).json({ available: true, message: "Nickname is available" });
+  } catch (error) {
+    console.error("Error checking nickname availability", error);
+    res.status(500).json({ message: "Error checking nickname availability" });
   }
 };

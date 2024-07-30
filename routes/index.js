@@ -409,5 +409,45 @@ router.get("/profile/:user_idx", Cuser.getUserProfileWithPosts);
  *         description: 서버 오류
  */
 router.patch("/profile/:user_idx", Cuser.updateUserProfile);
+/** 닉네임 중복 체크
+ * @swagger
+ * /api/check-nickname/{nickname}:
+ *   get:
+ *     summary: 닉네임 중복 체크
+ *     tags: [User]
+ *     parameters:
+ *       - in: path
+ *         name: nickname
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: 체크하려는 닉네임
+ *     responses:
+ *       200:
+ *         description: 닉네임 사용 가능
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 available:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       409:
+ *         description: 닉네임 중복
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 available:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: 서버 오류
+ */
+router.get("/check-nickname/:nickname", Cuser.checkNickname);
 
 module.exports = router;
