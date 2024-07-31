@@ -57,7 +57,7 @@ exports.kakaoCallback = async (req, res) => {
 
     // 세션에 사용자 정보 저장
     req.session.user = {
-      //   id: userRecord.id,
+      user_idx: userRecord.user_idx,
       nickname: userRecord.nickname,
       email: userRecord.email,
       img: userRecord.img,
