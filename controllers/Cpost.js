@@ -2,7 +2,17 @@ const db = require("../models");
 
 exports.createPost = async (req, res) => {
   try {
-    const { user_idx, gym_idx, clearday, media, content, color } = req.body;
+    const { clearday, media, content, color, gym_idx } = req.body;
+    // 세션에서 user_idx 가져오기
+    const user_idx = req.session.user.user_idx;
+    if (!user_idx) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    if (!clearday || !media || !color) {
+      return res
+        .status(400)
+        .json({ message: "등반일, 동영상, 난이도 선택은 필수입니다." });
+    }
     const newPost = await db.Post.create({
       user_idx,
       gym_idx,

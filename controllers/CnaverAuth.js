@@ -63,6 +63,7 @@ exports.naverCallback = async (req, res) => {
 
     // 사용자 정보 세션에 저장
     req.session.user = {
+      user_idx: user.user_idx,
       nickname: user.nickname,
       email: user.email,
       img: user.profile_image,
