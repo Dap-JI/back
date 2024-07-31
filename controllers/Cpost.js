@@ -39,7 +39,8 @@ exports.createPost = async (req, res) => {
 
 exports.getPostsByGym = async (req, res) => {
   try {
-    const { gym_idx, user_idx } = req.params;
+    const { gym_idx } = req.params;
+    const { color } = req.query; // 쿼리 파라미터에서 color 값을 가져옴
     // 조회할 때, gym의 name 가져오기
     const gym = await db.Gym.findByPk(gym_idx, {
       attributes: ["name"],
@@ -47,8 +48,15 @@ exports.getPostsByGym = async (req, res) => {
     if (!gym) {
       return res.status(404).json({ message: "Gym not found" });
     }
+    // 조건 객체를 생성하여 기본적으로 gym_idx로 필터링
+    const whereCondition = { gym_idx };
+    // color가 존재하면 조건에 추가
+    if (color) {
+      whereCondition.color = color;
+    }
+    // 조건에 따라 게시글을 조회
     const posts = await db.Post.findAll({
-      where: { gym_idx },
+      where: whereCondition,
       include: [
         {
           model: db.User,
@@ -56,7 +64,6 @@ exports.getPostsByGym = async (req, res) => {
         },
       ],
     });
-    console.log("post.user_idx~~~>>>", posts);
     const result = {
       gym_name: gym.name,
       posts: posts,
