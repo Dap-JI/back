@@ -4,6 +4,7 @@ exports.createPost = async (req, res) => {
   try {
     const { clearday, media, content, color, gym_idx } = req.body;
     // 세션에서 user_idx 가져오기
+    console.log("on createPost req.session.user--->>>", req.session);
     const user = req.session.user;
     if (!user || !user.user_idx) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -41,7 +42,10 @@ exports.createPost = async (req, res) => {
 exports.getPostsByGym = async (req, res) => {
   try {
     const { gym_idx } = req.params;
-    const { color } = req.query;
+    const { color, page = 1, take = 3 } = req.query; // 기본값으로 page=1, take=2 설정
+    console.log("on getPostsByGym req.session.user--->>>", req.session);
+
+    // 조회할 때, gym의 name 가져오기
     const gym = await db.Gym.findByPk(gym_idx, {
       attributes: ["name"],
     });
@@ -54,6 +58,11 @@ exports.getPostsByGym = async (req, res) => {
     if (color) {
       whereCondition.color = color;
     }
+    // 전체 게시글 수 조회
+    const totalCount = await db.Post.count({ where: whereCondition });
+    // 페이지네이션을 위한 offset과 limit 계산
+    const offset = (page - 1) * take;
+    const limit = parseInt(take);
     // 조건에 따라 게시글을 조회
     const posts = await db.Post.findAll({
       where: whereCondition,
@@ -63,10 +72,21 @@ exports.getPostsByGym = async (req, res) => {
           attributes: ["nickname"],
         },
       ],
+      offset: offset,
+      limit: limit,
+      order: [["createdAt", "DESC"]], // 최신 게시글 먼저 조회
     });
     const result = {
       gym_name: gym.name,
       posts: posts,
+      meta: {
+        page: parseInt(page),
+        take: limit,
+        totalCount: totalCount,
+        pageCount: Math.ceil(totalCount / limit),
+        hasPreviousPage: page > 1,
+        hasNextPage: offset + posts.length < totalCount,
+      },
     };
     res.status(200).json(result);
   } catch (error) {
