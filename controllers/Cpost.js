@@ -40,8 +40,6 @@ exports.createPost = async (req, res) => {
 
 exports.getPostsByGym = async (req, res) => {
   try {
-    console.log("req.session--->>>", req.session);
-    console.log("req.session.user--->>>", req.session.user);
     const { gym_idx } = req.params;
     const { color } = req.query;
     const gym = await db.Gym.findByPk(gym_idx, {

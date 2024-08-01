@@ -16,6 +16,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+// CORS 설정
+const corsOptions = {
+  origin: "http://localhost:3000", // 요청을 허용할 출처를 명시
+  credentials: true, // 자격 증명 허용
+};
+app.use(cors(corsOptions));
 app.use(
   session({
     secret: process.env.SESSION_SECRET, // 비밀 키 설정
@@ -23,7 +29,7 @@ app.use(
     saveUninitialized: true, // 초기화되지 않은 세션을 저장
     cookie: {
       httpOnly: true, // 클라이언트 측에서 쿠키 접근 불가
-      maxAge: 3600000, // 쿠키의 만료 시간 (밀리초 단위)
+      maxAge: 118800000, // 쿠키의 만료 시간 (밀리초 단위)
       secure: false, // 개발 환경에서는 false로 설정, 배포 시 true로 설정
     },
   })
