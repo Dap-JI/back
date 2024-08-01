@@ -4,10 +4,11 @@ exports.createPost = async (req, res) => {
   try {
     const { clearday, media, content, color, gym_idx } = req.body;
     // 세션에서 user_idx 가져오기
-    const user_idx = req.session.user.user_idx;
-    if (!user_idx) {
+    const user = req.session.user;
+    if (!user || !user.user_idx) {
       return res.status(401).json({ message: "Unauthorized" });
     }
+    const user_idx = user.user_idx;
     if (!clearday || !media || !color) {
       return res
         .status(400)
@@ -39,9 +40,10 @@ exports.createPost = async (req, res) => {
 
 exports.getPostsByGym = async (req, res) => {
   try {
+    console.log("req.session--->>>", req.session);
+    console.log("req.session.user--->>>", req.session.user);
     const { gym_idx } = req.params;
-    const { color } = req.query; // 쿼리 파라미터에서 color 값을 가져옴
-    // 조회할 때, gym의 name 가져오기
+    const { color } = req.query;
     const gym = await db.Gym.findByPk(gym_idx, {
       attributes: ["name"],
     });

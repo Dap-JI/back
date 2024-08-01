@@ -63,7 +63,14 @@ exports.kakaoCallback = async (req, res) => {
       img: userRecord.img,
       provider: userRecord.provider,
     };
-    console.log("Session user data:", req.session.user);
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+      } else {
+        console.log("Session saved successfully.");
+      }
+    });
+    console.log("Session after login:", req.session);
 
     // 사용자 정보 응답
     res.json(userRecord);
