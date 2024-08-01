@@ -11,12 +11,17 @@ const router = express.Router();
  *     tags: [Videos]
  *     consumes:
  *       - multipart/form-data
- *     parameters:
- *       - in: formData
- *         name: video
- *         type: file
- *         description: 업로드할 동영상 파일
- *         required: true
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               video:
+ *                 type: string
+ *                 format: binary
+ *                 description: 업로드할 동영상 파일
+ *                 required: true
  *     responses:
  *       200:
  *         description: 동영상 업로드 성공
