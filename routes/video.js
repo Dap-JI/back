@@ -34,6 +34,8 @@ const router = express.Router();
  *                   type: string
  *                 videoUrl:
  *                   type: string
+ *                 thumbnailUrl:
+ *                   type: string
  *       400:
  *         description: 파일이 업로드되지 않음
  *       500:
