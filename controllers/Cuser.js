@@ -6,7 +6,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
     // 사용자 정보 조회
     const user = await db.User.findOne({
       where: { user_idx },
-      attributes: ["nickname", "img", "introduce"],
+      attributes: ["nickname", "img", "introduce", "provider"],
     });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -14,6 +14,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
     // 사용자 게시글 조회
     const posts = await db.Post.findAll({
       where: { user_idx },
+      attributes: ["post_idx", "thumbnailUrl"],
     });
     // 사용자 정보와 게시글을 함께 반환
     res.status(200).json({

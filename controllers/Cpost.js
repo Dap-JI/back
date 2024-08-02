@@ -2,7 +2,7 @@ const db = require("../models");
 
 exports.createPost = async (req, res) => {
   try {
-    const { clearday, media, content, color, gym_idx } = req.body;
+    const { clearday, media, content, color, gym_idx, thumbnailUrl } = req.body;
     // 세션에서 user_idx 가져오기
     console.log("on createPost req.session.user--->>>", req.session);
     const user = req.session.user;
@@ -22,6 +22,7 @@ exports.createPost = async (req, res) => {
       media,
       content,
       color,
+      thumbnailUrl,
     });
     const postWithUser = await db.Post.findOne({
       where: { post_idx: newPost.post_idx },
