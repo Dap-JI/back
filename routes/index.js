@@ -373,9 +373,9 @@ router.get("/posts/:post_idx", Cpost.getPostDetails);
  *         description: 서버 오류
  */
 router.get("/user/profile", Cuser.getUserProfileWithPosts);
-/** 유저 프로필 수정
+/**
  * @swagger
- * /api/user/profile/{user_idx}:
+ * /api/user/profile:
  *   patch:
  *     summary: 유저 프로필 수정
  *     tags: [User]
@@ -396,6 +396,8 @@ router.get("/user/profile", Cuser.getUserProfileWithPosts);
  *                 type: string
  *               img:
  *                 type: string
+ *               introduce:
+ *                 type: string
  *     responses:
  *       200:
  *         description: 유저 프로필 수정 성공
@@ -408,7 +410,7 @@ router.get("/user/profile", Cuser.getUserProfileWithPosts);
  *       500:
  *         description: 서버 오류
  */
-router.patch("/profile/:user_idx", Cuser.updateUserProfile);
+router.patch("/user/profile", Cuser.updateUserProfile);
 /** 닉네임 중복 체크
  * @swagger
  * /api/check-nickname/{nickname}:
