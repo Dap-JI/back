@@ -338,7 +338,7 @@ router.get("/posts/:post_idx", Cpost.getPostDetails);
 // 유저 관련
 /** 유저 프로필 및 게시글 조회
  * @swagger
- * /api/user/profile/{user_idx}:
+ * /api/user/profile:
  *   get:
  *     summary: 유저 프로필 및 게시글 조회
  *     tags: [User]
@@ -372,7 +372,7 @@ router.get("/posts/:post_idx", Cpost.getPostDetails);
  *       500:
  *         description: 서버 오류
  */
-router.get("/profile/:user_idx", Cuser.getUserProfileWithPosts);
+router.get("/user/profile", Cuser.getUserProfileWithPosts);
 /** 유저 프로필 수정
  * @swagger
  * /api/user/profile/{user_idx}:
