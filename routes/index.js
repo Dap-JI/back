@@ -336,11 +336,11 @@ router.delete("/posts/:post_idx", Cpost.deletePost);
 router.get("/posts/:post_idx", Cpost.getPostDetails);
 
 // 유저 관련
-/** 유저 프로필 및 게시글 조회
+/** 다른 유저 프로필 및 게시글 조회
  * @swagger
- * /api/user/profile:
+ * /api/user/profile/{user_idx}:
  *   get:
- *     summary: 유저 프로필 및 게시글 조회
+ *     summary: 다른 유저 프로필 및 게시글 조회
  *     tags: [User]
  *     parameters:
  *       - in: path
@@ -372,8 +372,39 @@ router.get("/posts/:post_idx", Cpost.getPostDetails);
  *       500:
  *         description: 서버 오류
  */
-router.get("/user/profile", Cuser.getUserProfileWithPosts);
-/**
+router.get("/profile/:user_idx", Cuser.getUserProfileWithPosts);
+/** 나의 프로필 및 게시글 조회
+ * @swagger
+ * /api/user/profile/me:
+ *   get:
+ *     summary: 나의 프로필 및 게시글 조회
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: 유저 프로필 및 게시글 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     nickname:
+ *                       type: string
+ *                     img:
+ *                       type: string
+ *                 posts:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       404:
+ *         description: 유저를 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.get("/profile/me", Cuser.getUserProfileWithPosts);
+/** 유저 프로필 수정
  * @swagger
  * /api/user/profile:
  *   patch:
@@ -410,7 +441,7 @@ router.get("/user/profile", Cuser.getUserProfileWithPosts);
  *       500:
  *         description: 서버 오류
  */
-router.patch("/user/profile", Cuser.updateUserProfile);
+router.patch("/profile/me", Cuser.updateUserProfile);
 /** 닉네임 중복 체크
  * @swagger
  * /api/check-nickname/{nickname}:
