@@ -4,7 +4,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
   try {
     const { user_idx } = req.session.user;
     // 사용자 정보 조회
-    console.log("user_idx", user_idx);
+    console.log("user_idx--->>>", user_idx);
     const user = await db.User.findOne({
       where: { user_idx },
       attributes: ["nickname", "img", "introduce", "provider"],
