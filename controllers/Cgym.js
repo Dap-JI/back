@@ -3,8 +3,32 @@ const db = require("../models");
 // 클라이밍장 조회
 exports.getGyms = async (req, res) => {
   try {
-    const gyms = await db.Gym.findAll();
-    res.json(gyms);
+    const { page = 1, take = 15 } = req.query; // 기본값으로 page=1, take=10 설정
+    const offset = (page - 1) * take;
+    const limit = parseInt(take);
+
+    // 전체 클라이밍장 수 조회
+    const totalCount = await db.Gym.count();
+    // 페이지네이션을 위해 클라이밍장 조회
+    const gyms = await db.Gym.findAll({
+      offset: offset,
+      limit: limit,
+      order: [["gym_idx", "DESC"]], // gym_idx를 기준으로 내림차순 정렬
+    });
+
+    const result = {
+      gyms: gyms,
+      meta: {
+        page: parseInt(page),
+        take: limit,
+        totalCount: totalCount,
+        pageCount: Math.ceil(totalCount / limit),
+        hasPreviousPage: page > 1,
+        hasNextPage: offset + gyms.length < totalCount,
+      },
+    };
+
+    res.status(200).json(result);
   } catch (error) {
     console.error("Error fetching gyms:", error);
     res.status(500).send("Error fetching gyms");
