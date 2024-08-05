@@ -9,6 +9,7 @@ const sequelize = new Sequelize(
   {
     host: config[env].host,
     dialect: config[env].dialect,
+    timezone: "+09:00", // KST (Korea Standard Time)으로 설정
   }
 );
 
