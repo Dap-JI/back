@@ -401,6 +401,46 @@ router.get("/posts/:post_idx", Cpost.getPostDetails);
  *         description: 서버 오류
  */
 router.get("/profile/:user_idx", Cuser.getUserProfileWithPosts);
+
+/**
+ * @swagger
+ * /api/myinfo:
+ *   get:
+ *     summary: 로그인한 사용자의 정보 조회
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: 사용자 정보 조회 성공
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user_idx:
+ *                   type: integer
+ *                   example: 15
+ *       404:
+ *         description: 유저를 찾을 수 없음
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "User not found"
+ *       500:
+ *         description: 서버 오류
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error getMyInfo"
+ */
+router.get("/myinfo", Cuser.getMyInfo);
 /** 유저 프로필 수정
  * @swagger
  * /api/profile:

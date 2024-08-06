@@ -1,5 +1,19 @@
 const db = require("../models");
 
+exports.getMyInfo = async (req, res) => {
+  try {
+    const { user_idx } = req.session.user;
+    const user = await db.User.findByPk(user_idx);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    console.log("user_idx--->>>", user_idx);
+    res.status(200).json(user_idx);
+  } catch (error) {
+    console.error("Error getMyInfo", error);
+    res.status(500).json({ message: "Error getMyInfo" });
+  }
+};
 exports.getUserProfileWithPosts = async (req, res) => {
   try {
     const { user_idx } = req.params; // 조회할 유저의 user_idx를 경로 파라미터에서 가져옴
