@@ -15,26 +15,50 @@ router.use("/auth", authRoutes);
  *   get:
  *     summary: 클라이밍장 리스트 조회
  *     tags: [Gym]
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *         description: 클라이밍장 이름 검색어
  *     responses:
  *       200:
  *         description: 클라이밍장 리스트
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   gym_idx:
- *                     type: integer
- *                   name:
- *                     type: string
- *                   address:
- *                     type: string
- *                   logo:
- *                     type: string
- *                   notice:
- *                     type: string
+ *               type: object
+ *               properties:
+ *                 gyms:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       gym_idx:
+ *                         type: integer
+ *                       name:
+ *                         type: string
+ *                       address:
+ *                         type: string
+ *                       logo:
+ *                         type: string
+ *                       notice:
+ *                         type: string
+ *                 meta:
+ *                   type: object
+ *                   properties:
+ *                     page:
+ *                       type: integer
+ *                     take:
+ *                       type: integer
+ *                     totalCount:
+ *                       type: integer
+ *                     pageCount:
+ *                       type: integer
+ *                     hasPreviousPage:
+ *                       type: boolean
+ *                     hasNextPage:
+ *                       type: boolean
  *       500:
  *         description: 서버 오류
  */

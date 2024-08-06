@@ -1,16 +1,27 @@
+const { where } = require("sequelize");
 const db = require("../models");
 
 // 클라이밍장 조회
 exports.getGyms = async (req, res) => {
   try {
-    const { page = 1, take = 15 } = req.query; // 기본값으로 page=1, take=10 설정
+    const { page = 1, take = 15, search = "" } = req.query; // 기본값으로 page=1, take=10 설정
     const offset = (page - 1) * take;
     const limit = parseInt(take);
 
+    // 검색 조건 추가
+    const whereCondition = search
+      ? {
+          name: {
+            [db.Sequelize.Op.like]: `%${search}%`,
+          },
+        }
+      : {};
+
     // 전체 클라이밍장 수 조회
-    const totalCount = await db.Gym.count();
+    const totalCount = await db.Gym.count({ where: whereCondition });
     // 페이지네이션을 위해 클라이밍장 조회
     const gyms = await db.Gym.findAll({
+      where: whereCondition,
       offset: offset,
       limit: limit,
       order: [["gym_idx", "ASC"]], // gym_idx를 기준으로 내림차순 정렬
