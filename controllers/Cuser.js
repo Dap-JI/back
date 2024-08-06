@@ -2,13 +2,14 @@ const db = require("../models");
 
 exports.getUserProfileWithPosts = async (req, res) => {
   try {
-    const { user_idx } = req.session.user;
-    const { page = 1, take = 12 } = req.query; // 기본값으로 page=1, take=10 설정
+    const { user_idx } = req.params; // 조회할 유저의 user_idx를 경로 파라미터에서 가져옴
+    const { page = 1, take = 12 } = req.query; // 기본값으로 page=1, take=12 설정
     const offset = (page - 1) * take;
     const limit = parseInt(take);
+    const loggedInUserIdx = req.session.user.user_idx; // 현재 로그인한 유저의 user_idx
 
     // 사용자 정보 조회
-    console.log("user_idx--->>>", user_idx);
+    console.log("userProfile user_idx--->>>", user_idx);
     const user = await db.User.findOne({
       where: { user_idx },
       attributes: ["nickname", "img", "introduce", "provider"],
@@ -39,6 +40,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
         hasPreviousPage: page > 1,
         hasNextPage: offset + posts.length < totalCount,
       },
+      isOwnProfile: loggedInUserIdx === parseInt(user_idx), // 본인의 프로필인지 여부를 추가
     };
 
     // 사용자 정보와 게시글을 함께 반환
