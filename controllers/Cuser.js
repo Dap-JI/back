@@ -3,6 +3,10 @@ const db = require("../models");
 exports.getUserProfileWithPosts = async (req, res) => {
   try {
     const { user_idx } = req.session.user;
+    const { page = 1, take = 12 } = req.query; // 기본값으로 page=1, take=10 설정
+    const offset = (page - 1) * take;
+    const limit = parseInt(take);
+
     // 사용자 정보 조회
     console.log("user_idx--->>>", user_idx);
     const user = await db.User.findOne({
@@ -12,16 +16,33 @@ exports.getUserProfileWithPosts = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    // 사용자 게시글 조회
+
+    // 전체 게시글 수 조회
+    const totalCount = await db.Post.count({ where: { user_idx } });
+    // 페이지네이션을 위한 offset과 limit 계산
     const posts = await db.Post.findAll({
       where: { user_idx },
-      attributes: ["post_idx", "thumbnailUrl"],
+      attributes: ["post_idx", "thumbnailUrl", "gym_idx"],
+      offset: offset,
+      limit: limit,
+      order: [["createdAt", "DESC"]], // 최신 게시글 먼저 조회
     });
-    // 사용자 정보와 게시글을 함께 반환
-    res.status(200).json({
+
+    const result = {
       user,
       posts,
-    });
+      meta: {
+        page: parseInt(page),
+        take: limit,
+        totalCount: totalCount,
+        pageCount: Math.ceil(totalCount / limit),
+        hasPreviousPage: page > 1,
+        hasNextPage: offset + posts.length < totalCount,
+      },
+    };
+
+    // 사용자 정보와 게시글을 함께 반환
+    res.status(200).json(result);
   } catch (error) {
     console.error("Error fetching user profile and posts", error);
     res.status(500).json({ message: "Error fetching user profile and posts" });
