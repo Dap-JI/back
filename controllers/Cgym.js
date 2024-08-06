@@ -13,7 +13,7 @@ exports.getGyms = async (req, res) => {
     const gyms = await db.Gym.findAll({
       offset: offset,
       limit: limit,
-      order: [["gym_idx", "DESC"]], // gym_idx를 기준으로 내림차순 정렬
+      order: [["gym_idx", "ASC"]], // gym_idx를 기준으로 내림차순 정렬
     });
 
     const result = {
