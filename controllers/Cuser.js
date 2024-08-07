@@ -44,6 +44,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
       order: [["createdAt", "DESC"]], // 최신 게시글 먼저 조회
     });
 
+    const isOwnProfile = loggedInUserIdx === parseInt(user_idx); // 본인의 프로필인지
     const result = {
       user,
       posts,
@@ -55,10 +56,12 @@ exports.getUserProfileWithPosts = async (req, res) => {
         hasPreviousPage: page > 1,
         hasNextPage: offset + posts.length < totalCount,
       },
-      isOwnProfile: loggedInUserIdx === parseInt(user_idx), // 본인의 프로필인지 여부를 추가
-      userRole,
+      isOwnProfile,
     };
-
+    // 본인의 프로필인 경우에만 role 추가
+    if (isOwnProfile) {
+      result.userRole = userRole;
+    }
     // 사용자 정보와 게시글을 함께 반환
     res.status(200).json(result);
   } catch (error) {
