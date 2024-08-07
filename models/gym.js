@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       logo: {
         type: DataTypes.STRING(255),
-        allowNull: false,
+        allowNull: true,
       },
       notice: {
         type: DataTypes.STRING(500),

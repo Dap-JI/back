@@ -38,6 +38,12 @@ module.exports = (sequelize, DataTypes) => {
         values: ["kakao", "naver"],
         allowNull: false,
       },
+      role: {
+        type: DataTypes.ENUM,
+        values: ["user", "admin"],
+        defaultValue: "user",
+        allowNull: false,
+      },
     },
     {
       timestamps: true,
