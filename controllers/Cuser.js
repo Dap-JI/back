@@ -21,9 +21,10 @@ exports.getUserProfileWithPosts = async (req, res) => {
     const offset = (page - 1) * take;
     const limit = parseInt(take);
     const loggedInUserIdx = req.session.user.user_idx; // 현재 로그인한 유저의 user_idx
+    const userRole = req.session.user.role;
 
     // 사용자 정보 조회
-    console.log("userProfile user_idx--->>>", user_idx);
+    console.log("userRole--->>>", userRole);
     const user = await db.User.findOne({
       where: { user_idx },
       attributes: ["nickname", "img", "introduce", "provider"],
@@ -55,6 +56,7 @@ exports.getUserProfileWithPosts = async (req, res) => {
         hasNextPage: offset + posts.length < totalCount,
       },
       isOwnProfile: loggedInUserIdx === parseInt(user_idx), // 본인의 프로필인지 여부를 추가
+      userRole,
     };
 
     // 사용자 정보와 게시글을 함께 반환

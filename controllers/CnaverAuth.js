@@ -53,14 +53,6 @@ exports.naverCallback = async (req, res) => {
       },
     });
 
-    // if (!created) {
-    //   // 사용자 정보가 이미 존재하면 업데이트
-    //   await userRecord.update({
-    //     nickname: user.nickname,
-    //     img: user.profile_image,
-    //   });
-    // }
-
     // 사용자 정보 세션에 저장
     req.session.user = {
       user_idx: userRecord.user_idx,
@@ -68,6 +60,7 @@ exports.naverCallback = async (req, res) => {
       email: userRecord.email,
       img: userRecord.img,
       provider: userRecord.provider,
+      role: userRecord.role,
     };
 
     res.json(req.session.user);

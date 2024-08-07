@@ -50,11 +50,6 @@ exports.kakaoCallback = async (req, res) => {
       defaults: { nickname, email, img, provider },
     });
 
-    // if (!created) {
-    //   // 사용자 정보가 이미 존재하면 업데이트
-    //   await userRecord.update({ nickname, img });
-    // }
-
     // 세션에 사용자 정보 저장
     req.session.user = {
       user_idx: userRecord.user_idx,
@@ -62,6 +57,7 @@ exports.kakaoCallback = async (req, res) => {
       email: userRecord.email,
       img: userRecord.img,
       provider: userRecord.provider,
+      role: userRecord.role,
     };
     req.session.save((err) => {
       if (err) {

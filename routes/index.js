@@ -402,7 +402,7 @@ router.get("/posts/:post_idx", Cpost.getPostDetails);
  */
 router.get("/profile/:user_idx", Cuser.getUserProfileWithPosts);
 
-/**
+/** 로그인한 사용자의 정보(user_idx) 조회
  * @swagger
  * /api/myinfo:
  *   get:
