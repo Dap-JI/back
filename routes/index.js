@@ -63,6 +63,43 @@ router.use("/auth", authRoutes);
  *         description: 서버 오류
  */
 router.get("/gyms", Cgym.getGyms);
+/** 클라이밍장 리스트 상세 조회
+ * @swagger
+ * /api/gyms/{gym_idx}:
+ *   get:
+ *     summary: 클라이밍장 리스트 상세 조회
+ *     tags: [Gym]
+ *     parameters:
+ *       - in: path
+ *         name: gym_idx
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: 조회하려는 클라이밍장 id
+ *     responses:
+ *       200:
+ *         description: 클라이밍장 리스트 상세
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 gym_idx:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 address:
+ *                   type: string
+ *                 logo:
+ *                   type: string
+ *                 notice:
+ *                   type: string
+ *       404:
+ *         description: 클라이밍장 찾을 수 없음
+ *       500:
+ *         description: 서버 오류
+ */
+router.get("/gyms/:gym_idx", Cgym.getGymsDetails);
 /** 새로운 클라이밍장 생성
  * @swagger
  * /api/gyms:

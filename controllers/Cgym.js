@@ -46,6 +46,23 @@ exports.getGyms = async (req, res) => {
   }
 };
 
+//클라이밍장 상세 조회
+exports.getGymsDetails = async (req, res) => {
+  try {
+    const { gym_idx } = req.params;
+    const gym = await db.Gym.findOne({
+      where: { gym_idx },
+    });
+    if (!gym) {
+      return res.status(404).json({ message: "gymDetails not found" });
+    }
+    res.status(200).json(gym);
+  } catch (error) {
+    console.error("Error fetching gym details:", error);
+    res.status(500).json({ message: "Error fetching gym details" });
+  }
+};
+
 // 클라이밍장 추가
 exports.createGym = async (req, res) => {
   const { name, address, logo, notice } = req.body;
