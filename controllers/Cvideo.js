@@ -8,6 +8,7 @@ const {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
+  DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const s3 = require("../config/awsConfig"); // S3 클라이언트
 const bucketName = process.env.S3_BUCKET_NAME;
@@ -65,6 +66,17 @@ const downloadFromS3 = async (bucket, key, downloadPath) => {
   });
 };
 
+// S3에서 파일 삭제 함수
+const deleteFromS3 = async (bucket, key) => {
+  const params = {
+    Bucket: bucket,
+    Key: key,
+  };
+
+  const command = new DeleteObjectCommand(params);
+  await s3.send(command);
+};
+
 exports.uploadVideo = async (req, res) => {
   try {
     if (!req.file) {
@@ -81,8 +93,11 @@ exports.uploadVideo = async (req, res) => {
     // 동영상 재생시간 체크
     const duration = await checkVideoDuration(videoDownloadPath);
     if (duration > 60) {
-      // 60초 이상인 경우 에러 반환
-      return res.status(400).send("Video duration exceeds 1 minute");
+      // 60초 이상인 경우 S3에서 동영상 삭제
+      await deleteFromS3(bucketName, videoKey);
+      return res
+        .status(400)
+        .send("Video duration exceeds 1 minute and has been deleted");
     }
 
     const thumbnailPath = path.join(os.tmpdir(), "thumbnails");
