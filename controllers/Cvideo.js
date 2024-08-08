@@ -34,6 +34,19 @@ const extractThumbnail = (videoPath, thumbnailPath) => {
   });
 };
 
+// 동영상 재생시간 체크 함수
+const checkVideoDuration = (videoPath) => {
+  return new Promise((resolve, reject) => {
+    ffmpeg.ffprobe(videoPath, (err, metadata) => {
+      if (err) {
+        return reject(err);
+      }
+      const duration = metadata.format.duration;
+      resolve(duration);
+    });
+  });
+};
+
 // S3에서 파일 다운로드 함수
 const downloadFromS3 = async (bucket, key, downloadPath) => {
   const params = {
@@ -64,6 +77,13 @@ exports.uploadVideo = async (req, res) => {
 
     // S3에서 업로드된 동영상 다운로드
     await downloadFromS3(bucketName, videoKey, videoDownloadPath);
+
+    // 동영상 재생시간 체크
+    const duration = await checkVideoDuration(videoDownloadPath);
+    if (duration > 60) {
+      // 60초 이상인 경우 에러 반환
+      return res.status(400).send("Video duration exceeds 1 minute");
+    }
 
     const thumbnailPath = path.join(os.tmpdir(), "thumbnails");
 
