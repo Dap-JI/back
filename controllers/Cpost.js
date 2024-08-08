@@ -70,7 +70,7 @@ exports.getPostsByGym = async (req, res) => {
       include: [
         {
           model: db.User,
-          attributes: ["nickname"],
+          attributes: ["nickname", "img"],
         },
       ],
       offset: offset,
