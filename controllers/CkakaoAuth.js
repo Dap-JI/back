@@ -39,7 +39,6 @@ exports.kakaoCallback = async (req, res) => {
     const user = userResponse.data;
 
     // 사용자 정보 추출
-    const nickname = user.properties.nickname;
     const email = user.kakao_account.email;
     const img = user.kakao_account.profile.profile_image_url;
     const provider = "kakao";
@@ -47,7 +46,7 @@ exports.kakaoCallback = async (req, res) => {
     // 사용자 정보 저장 또는 업데이트
     const [userRecord, created] = await db.User.findOrCreate({
       where: { email, provider },
-      defaults: { nickname, email, img, provider },
+      defaults: { email, img, provider, nickname: null }, // nickname을 null로 기본값 설정
     });
 
     // 세션에 사용자 정보 저장

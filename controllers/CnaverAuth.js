@@ -46,7 +46,7 @@ exports.naverCallback = async (req, res) => {
     const [userRecord, created] = await db.User.findOrCreate({
       where: { email: user.email, provider: provider },
       defaults: {
-        nickname: user.nickname,
+        nickname: null,
         email: user.email,
         img: user.profile_image,
         provider: user.provider,
